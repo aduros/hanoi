@@ -23,8 +23,11 @@ enum RopeState {
 
 class Rope extends Sprite
 {
-    public var hook :Point;
-    public var length :PFloat;
+    public static inline var SPEED = 0.5;
+
+    public var hookPos (default, null) :Point;
+    public var hookVel (default, null) :Point;
+    public var length (default, null) :PFloat;
 
     public var state (default, null) :RopeState;
 
@@ -32,13 +35,13 @@ class Rope extends Sprite
     {
         super();
         length = new PFloat(0);
-        hook = new Point();
+        hookPos = new Point();
         state = Unused;
 
-        _vel = new Point();
+        hookVel = new Point();
 
         _ropeTexture = ClientCtx.pack.loadTexture("rope.png");
-        // _hookTexture = ClientCtx.pack.loadTexture("hook");
+        // _hookTexture = ClientCtx.pack.loadTexture("hookPos");
     }
 
     override public function onAdded ()
@@ -53,31 +56,28 @@ class Rope extends Sprite
 
     public function onMouseDown (event :MouseEvent)
     {
-        _vel.x = event.viewX;
-        _vel.y = event.viewY;
-        _vel.normalize();
-
         var transform = owner.get(Transform);
         transform.rotation._ = 0;
 
-        var delta = getViewMatrix().inverseTransformPoint(event.viewX, event.viewY);
-        trace(delta);
-
-        var angle = Math.atan(delta.y/delta.x);
-        if (delta.x < 0) {
+        var local = getViewMatrix().inverseTransformPoint(event.viewX, event.viewY);
+        var angle = Math.atan(local.y/local.x);
+        if (local.x < 0) {
             angle += FMath.PI;
         }
         transform.rotation._ = FMath.toDegrees(angle);
-        trace(owner.get(Transform).rotation._);
 
-        trace("increasing");
-        length.setBehavior(new IncreasingBehavior(0, 0.5));
+        hookVel.x = local.x;
+        hookVel.y = local.y;
+        hookVel.normalize();
+
+        length.setBehavior(new IncreasingBehavior(0, SPEED));
         state = Extending;
     }
 
     public function onMouseUp (event :MouseEvent)
     {
         length.animateTo(0, 150);
+        hookPos.x = hookPos.y = 0;
         state = Unused;
     }
 
@@ -86,11 +86,11 @@ class Rope extends Sprite
         super.onUpdate(dt);
         length.update(dt);
 
-        // if (state == Extending) {
-        //     length._ += dt * 0.5;
-        // } else {
-        //     length.update(dt);
-        // }
+        if (state == Extending) {
+            var transform = owner.get(Transform);
+            hookPos.x += SPEED*dt*hookVel.x;
+            hookPos.y += SPEED*dt*hookVel.y;
+        }
     }
 
     override public function draw (ctx :DrawingContext)
@@ -101,9 +101,13 @@ class Rope extends Sprite
     public function grapple ()
     {
         state = Grappling;
+        length.setBehavior(null);
+
+        // var t = owner.parent.get(Transform);
+        // t.x._ -= hookPos.x;
+        // t.y._ -= hookPos.y;
     }
 
-    private var _vel :Point;
     private var _ropeTexture :Texture;
     private var _hookTexture :Texture;
 }

@@ -10,7 +10,7 @@ import flambe.display.FillSprite;
 
 class Objects
 {
-    public static function newPlayer ()
+    public static function newPlayer () :Entity
     {
         var rope = new Rope();
         var player = new Entity()
@@ -23,5 +23,16 @@ class Objects
         player.get(flambe.display.Transform).x._ = 100;
 
         return player;
+    }
+
+    public static function newPagoda () :Entity
+    {
+        var pagoda = new Entity()
+            .add(new Pagoda());
+        pagoda.get(flambe.display.Transform).x._ = 300;
+        pagoda.get(flambe.display.Transform).y._ = System.stageHeight;
+
+        ClientCtx.pagodas.push(pagoda.get(Pagoda));
+        return pagoda;
     }
 }

@@ -18,6 +18,9 @@ class Scenes
         var player = Objects.newPlayer();
         scene.addChild(player);
 
+        var pagoda = Objects.newPagoda();
+        scene.addChild(pagoda);
+
         return scene;
     }
 }

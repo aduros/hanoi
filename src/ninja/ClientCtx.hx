@@ -11,4 +11,6 @@ class ClientCtx
 {
     public static var pack :AssetPack;
     public static var fontTiny :Font;
+
+    public static var pagodas :Array<Pagoda> = [];
 }
