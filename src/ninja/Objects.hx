@@ -6,7 +6,8 @@ package ninja;
 
 import flambe.Entity;
 import flambe.System;
-import flambe.display.FillSprite;
+import flambe.display.AnimatedSprite;
+import flambe.display.Transform;
 
 class Objects
 {
@@ -14,25 +15,26 @@ class Objects
     {
         var rope = new Rope();
         var player = new Entity()
-            .add(new FillSprite(0xff0000, 32, 40))
+            .add(new AnimatedSprite(ClientCtx.pack.loadTexture("player.png"), 3, 1))
             .add(new Player(rope));
+        player.get(AnimatedSprite).anchorX._ = 24;
+        player.get(AnimatedSprite).anchorY._ = 48;
+        // player.get(AnimatedSprite).frame = 2;
 
         player.addChild(new Entity()
             .add(rope));
 
-        player.get(flambe.display.Transform).x._ = 100;
+        player.get(Transform).x._ = 100;
 
         return player;
     }
 
-    public static function newPagoda () :Entity
+    public static function newPagoda (pagoda :Pagoda) :Entity
     {
-        var pagoda = new Entity()
-            .add(new Pagoda());
-        pagoda.get(flambe.display.Transform).x._ = 300;
-        pagoda.get(flambe.display.Transform).y._ = System.stageHeight;
-
-        ClientCtx.pagodas.push(pagoda.get(Pagoda));
-        return pagoda;
+        var ent = new Entity()
+            .add(pagoda);
+        ent.get(Transform).x._ = pagoda.startsAt + pagoda.maxWidth/2;
+        ent.get(Transform).y._ = System.stageHeight;
+        return ent;
     }
 }

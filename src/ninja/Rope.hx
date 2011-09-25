@@ -56,10 +56,16 @@ class Rope extends Sprite
 
     public function onMouseDown (event :MouseEvent)
     {
+        // HACK
         var transform = owner.get(Transform);
         transform.rotation._ = 0;
+        owner.parent.get(Transform).rotation._ = 0;
+
+        hookPos.x = 0;
+        hookPos.y = -Player.HEIGHT/2;
 
         var local = getViewMatrix().inverseTransformPoint(event.viewX, event.viewY);
+        trace(local);
         var angle = Math.atan(local.y/local.x);
         if (local.x < 0) {
             angle += FMath.PI;
@@ -95,7 +101,7 @@ class Rope extends Sprite
 
     override public function draw (ctx :DrawingContext)
     {
-        ctx.drawPattern(_ropeTexture, 0, 0, length._, _ropeTexture.height);
+        ctx.drawPattern(_ropeTexture, 0, -Player.HEIGHT/2, length._, _ropeTexture.height);
     }
 
     public function grapple ()
@@ -106,6 +112,12 @@ class Rope extends Sprite
         // var t = owner.parent.get(Transform);
         // t.x._ -= hookPos.x;
         // t.y._ -= hookPos.y;
+    }
+
+    public function ungrapple ()
+    {
+        state = Unused;
+        length._ = 0;
     }
 
     private var _ropeTexture :Texture;
