@@ -42,7 +42,7 @@ class Objects
     public static function newTimer () :Entity
     {
         return new Entity()
-            .add(new TextSprite(ClientCtx.fontTiny))
+            .add(new TextSprite(ClientCtx.fontNinja))
             .add(new Timer());
     }
 }

@@ -4,15 +4,19 @@
 
 package ninja;
 
+import haxe.Unserializer;
+import haxe.Serializer;
+
 import flambe.animation.Easing;
-import flambe.Entity;
-import flambe.scene.Director;
-import flambe.System;
 import flambe.display.FillSprite;
 import flambe.display.PatternSprite;
 import flambe.display.Sprite;
-import flambe.display.Transform;
 import flambe.display.TextSprite;
+import flambe.display.Transform;
+import flambe.Entity;
+import flambe.math.FMath;
+import flambe.scene.Director;
+import flambe.System;
 
 class Scenes
 {
@@ -28,7 +32,9 @@ class Scenes
 
     private static function newPlayingScene ()
     {
-        ClientCtx.model = new GameModel(666);
+        var seed = 7 + FMath.toInt(Date.now().getTime() / (1000*60*60*24));
+        trace("Playing seed " + seed);
+        ClientCtx.model = new GameModel(seed);
 
         var scene = new Entity();
 
@@ -71,7 +77,7 @@ class Scenes
         popup.get(FillSprite).alpha._ = 0.8;
 
         var playAgain = new Entity()
-            .add(new TextSprite(ClientCtx.fontTiny, "Play again?"));
+            .add(new TextSprite(ClientCtx.fontNinja, "Play again?"));
         var t = playAgain.get(Transform);
         var text = playAgain.get(TextSprite);
         t.x._ = w - text.getNaturalWidth() - 10;
@@ -79,23 +85,34 @@ class Scenes
         text.mouseDown.connect(function (_) enterPlayingScene());
         popup.addChild(playAgain);
 
-        var prevBest = 6;
+        var save :Dynamic = System.storage.get("save");
+        save = (save != null) ? Unserializer.run(save) : {};
+
+        var prevBest = FMath.toInt(save.bestScore);
+        var seed = FMath.toInt(save.seed);
+        var newHighScore = (seed != ClientCtx.model.seed) || (score > prevBest);
+
+        if (newHighScore) {
+            save.seed = ClientCtx.model.seed;
+            save.bestScore = score;
+            System.storage.set("save", Serializer.run(save));
+        }
+
         var lines = [
             "You reached " + score + " meters",
             "Before " + cause,
-            (score > prevBest) ?
-                "That beats today's high score!" : "Today's high score is " + prevBest,
+            newHighScore ? "That beats today's high score!" : "Today's high score is " + prevBest,
             "",
             "Return tomorrow for a new level",
         ];
         var y = 10;
         for (line in lines) {
-            var ent = new Entity().add(new TextSprite(ClientCtx.fontTiny, line));
+            var ent = new Entity().add(new TextSprite(ClientCtx.fontNinja, line));
             popup.addChild(ent);
             var t = ent.get(Transform);
             t.x._ = 10;
             t.y._ = y;
-            y += ClientCtx.fontTiny.size;
+            y += ClientCtx.fontNinja.size;
         }
 
         // var mainMenu = new Entity()

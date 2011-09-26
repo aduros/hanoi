@@ -11,7 +11,7 @@ import flambe.Entity;
 class ClientCtx
 {
     public static var pack :AssetPack;
-    public static var fontTiny :Font;
+    public static var fontNinja :Font;
 
     public static var model :GameModel;
     public static var player :Entity; // HACK

@@ -23,9 +23,9 @@ class ClientMain
             ClientCtx.pack = loader.pack;
 
             // Initialize some common assets
-            ClientCtx.fontTiny = new Font(ClientCtx.pack, "ninjafont");
+            ClientCtx.fontNinja = new Font(ClientCtx.pack, "ninjafont");
 
-            System.root.addChild(new Entity().add(new flambe.util.FpsLog(ClientCtx.fontTiny)));
+            System.root.addChild(new Entity().add(new flambe.util.FpsLog(ClientCtx.fontNinja)));
 
             // Main screen turn on
             Scenes.enterPlayingScene();

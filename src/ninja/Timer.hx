@@ -14,7 +14,7 @@ class Timer extends Component
 {
     public function new ()
     {
-        _countdown = 1000*10;
+        _countdown = 1000*90;
     }
 
     override public function onUpdate (dt :Int)

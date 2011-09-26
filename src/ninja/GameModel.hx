@@ -8,8 +8,11 @@ import flambe.util.Random;
 
 class GameModel
 {
+    public var seed (default, null) :Int;
+
     public function new (seed :Int)
     {
+        this.seed = seed;
         _random = new Random(seed);
         _pagodas = [];
     }
