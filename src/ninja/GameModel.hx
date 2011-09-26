@@ -8,8 +8,6 @@ import flambe.util.Random;
 
 class GameModel
 {
-    public var bestDistance :Int;
-
     public function new (seed :Int)
     {
         _random = new Random(seed);

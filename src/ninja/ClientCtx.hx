@@ -6,6 +6,7 @@ package ninja;
 
 import flambe.asset.AssetPack;
 import flambe.display.Font;
+import flambe.Entity;
 
 class ClientCtx
 {
@@ -13,4 +14,5 @@ class ClientCtx
     public static var fontTiny :Font;
 
     public static var model :GameModel;
+    public static var player :Entity; // HACK
 }

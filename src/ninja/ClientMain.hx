@@ -23,12 +23,12 @@ class ClientMain
             ClientCtx.pack = loader.pack;
 
             // Initialize some common assets
-            ClientCtx.fontTiny = new Font(ClientCtx.pack, "tinyfont");
+            ClientCtx.fontTiny = new Font(ClientCtx.pack, "ninjafont");
 
             System.root.addChild(new Entity().add(new flambe.util.FpsLog(ClientCtx.fontTiny)));
 
             // Main screen turn on
-            System.root.get(Director).unwindToScene(Scenes.newPlayingScene());
+            Scenes.enterPlayingScene();
         });
         loader.error.connect(function (msg) {
             trace("Loading error: " + msg);

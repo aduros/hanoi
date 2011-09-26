@@ -8,6 +8,7 @@ import flambe.Entity;
 import flambe.System;
 import flambe.display.AnimatedSprite;
 import flambe.display.Transform;
+import flambe.display.TextSprite;
 
 class Objects
 {
@@ -36,5 +37,12 @@ class Objects
         ent.get(Transform).x._ = pagoda.startsAt + pagoda.maxWidth/2;
         ent.get(Transform).y._ = System.stageHeight;
         return ent;
+    }
+
+    public static function newTimer () :Entity
+    {
+        return new Entity()
+            .add(new TextSprite(ClientCtx.fontTiny))
+            .add(new Timer());
     }
 }

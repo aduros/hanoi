@@ -46,9 +46,6 @@ class Player extends Component
         var sprite = owner.get(AnimatedSprite);
 
         var pagoda = ClientCtx.model.getPagoda(_pagodaId);
-        // if (pagoda.owner == null) {
-        //     owner.parent.addChild(Objects.newPagoda(pagoda));
-        // }
 
         var ground = System.stageHeight;
         if (_rope.state != Grappling) {
@@ -57,9 +54,10 @@ class Player extends Component
                 _vel.x = 0;
                 _vel.y = 0;
                 transform.y._ = ground;
-                transform.rotation._ = 0;
+                transform.rotation._ = 90;
                 sprite.frame = 2;
-                // TODO(bruno): GAME OVER
+                Scenes.enterGameOverScene(FMath.toInt(owner.get(Transform).x._ / 20),
+                    "falling to Earth");
 
             } else {
                 var vx = _vel.x*dt*60/1000;
